@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const db = require("../db/connection.js");
+
 const users = db.get("users");
 // users.index('username');
 users.createIndex("username", { unique: true });
@@ -11,7 +12,8 @@ users.createIndex("username", { unique: true });
 const auth = express.Router();
 
 const schema = Joi.object().keys({
-  username: Joi.string().alphanum().min(2).max(30).required(),
+  username: Joi.string().alphanum().min(2).max(30)
+    .required(),
   password: Joi.string().min(6).required(),
 });
 
@@ -22,7 +24,7 @@ auth.get("/", (req, res) => {
 });
 
 function createTokenSendResponse(user, res, next) {
-  const jwt_result = jwt.sign(
+  const jwtResult = jwt.sign(
     {
       _id: user._id,
       username: user.username,
@@ -30,16 +32,16 @@ function createTokenSendResponse(user, res, next) {
     process.env.TOKEN_SECRET,
     {
       expiresIn: "1d",
-    }
+    },
   );
 
-  if (!jwt_result) {
+  if (!jwtResult) {
     next(new Error("Failed to generate JWT"));
     return;
   }
 
   res.json({
-    token: jwt_result,
+    token: jwtResult,
   });
 }
 
@@ -86,9 +88,9 @@ auth.post("/login", async (req, res, next) => {
     return;
   }
 
-  const bcrypt_hash = await bcrypt.compare(req.body.password, user.password);
+  const bcryptHash = await bcrypt.compare(req.body.password, user.password);
 
-  if (bcrypt_hash) {
+  if (!bcryptHash) {
     next(new Error("Password does not match"));
     return;
   }

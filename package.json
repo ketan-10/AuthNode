@@ -2,27 +2,34 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "seedAdmin": "node tasks/createAdminUser.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "seedAdmin": "node src/tasks/createAdminUser.js",
+    "lint": "eslint src/",
+    "test": "set NODE_ENV=test&& mocha \"src/**/*.test.js\" --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chai": "^4.2.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "joi": "^17.1.1",
     "jsonwebtoken": "^8.5.1",
-    "mock": "^0.1.1",
     "monk": "^7.3.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
+    "supertest": "^4.0.2"
   }
 }

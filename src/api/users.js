@@ -14,7 +14,7 @@ const schema = Joi.object().keys({
   active: Joi.bool(),
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   res.json({
     users: await users.find({}, "-password"),
   });
@@ -33,28 +33,27 @@ router.patch("/:id", async (req, res, next) => {
     // get id form url
     const { id: _id } = req.params;
 
-    update_data = req.body;
+    const updateData = req.body;
 
-    if (update_data.password) {
-      update_data.password = await bcrypt.hash(update_data.password, 10);
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
     }
 
-    const updated_user = await users.findOneAndUpdate(
+    const updatedUser = await users.findOneAndUpdate(
       { _id },
-      { $set: update_data }
+      { $set: updateData },
     );
 
-    if (!updated_user) {
+    if (!updatedUser) {
       next(new Error(`User of id ${_id} not found`));
       return;
     }
     res.json({
       id: _id,
-      user: updated_user,
+      user: updatedUser,
     });
   } catch (error) {
     next(error);
-    return;
   }
 });
 

@@ -2,20 +2,18 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
+require("dotenv").config();
+
 const auth = require("./auth/index.js");
 const middleware = require("./auth/middlewares");
 const notes = require("./api/notes");
 const users = require("./api/users");
+// console.log(require('dotenv').config())
 
 const app = express();
-require("dotenv").config();
 
 app.use(morgan("dev"));
-app.use(
-  cors({
-    origin: "https://localhost:8080",
-  })
-);
+app.use(cors({ origin: "https://localhost:8080" }));
 
 app.use(express.json());
 app.use(middleware.checkTokenSetUser);
@@ -39,8 +37,7 @@ function notFound(req, res, next) {
 }
 
 function errorHandler(err, req, res, next) {
-  console.log(err);
-  res.status(res.statusCode || 500);
+  res.status(500);
   res.json({
     message: err.message,
     stack: err.stack,
@@ -50,7 +47,4 @@ function errorHandler(err, req, res, next) {
 app.use(notFound);
 app.use(errorHandler);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
-});
+module.exports = app;
