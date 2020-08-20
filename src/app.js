@@ -4,8 +4,8 @@ const cors = require("cors");
 
 require("dotenv").config();
 
-const auth = require("./auth/index.js");
-const middleware = require("./auth/middlewares");
+const auth = require("./auth/auth.routes.js");
+const middleware = require("./auth/auth.middlewares");
 const notes = require("./api/notes");
 const users = require("./api/users");
 // console.log(require('dotenv').config())
